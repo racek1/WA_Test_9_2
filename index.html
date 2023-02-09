@@ -11,9 +11,12 @@
         crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
+
 <body>
     <div class="container text-center">
-        <h1>Autoservis</h1>
+        <h1>Auto Prdík</h1>
+        <h3>sus</h3>
+        <hr>
     </div>
 
     <div class="container" style="width: 25%;">
@@ -30,8 +33,15 @@
             <input id="najeteKmInput" type="text" class="form-control" placeholder="Najeté kilometry" aria-label="Najeté kilometry" aria-describedby="basic-addon1">
         </div>
         <button id="submitButton" type="button" class="btn btn-primary">Submit</button>
+        <button id="printAllAutaButton" type="button" class="btn btn-primary">Vypsat auta</button>
+    </div>
+
+    <br>
+    <div class="container text-center">
+        <p id="autaText"></p>
     </div>
 </body>
+
 <script>
 
     class Auto
@@ -47,15 +57,29 @@
 
     class Autoservis
     {
-        constructor(auta,nazev)
+        constructor(nazev)
         {
-            this.auta = auta;
             this.nazev = nazev;
         }
 
-        GetVsechnyAuta() 
+        LoadAuta()
         {
-            return auta;
+            for (let i = 0; i < GetSavedAutaCount(); i++)
+            {
+                let text = window.localStorage.getItem("auto" + i);
+                let newAuto = JSON.parse(text);
+                auta.push(newAuto);
+            }
+        }
+
+        PrintAllAuta() 
+        {
+            let text = "";
+            this.auta.forEach(element =>
+            {
+                text += "[Značka: " + element.znacka + "] [Model: " + element.model + "] [Rok výroby: " + element.rokVyroby + "] [Najeté km: " + element.najeteKm + "]<br>";
+            });
+            autaText.innerHTML = text;
         }
 
         AddAuto(auto)
@@ -69,27 +93,31 @@
                 if (element == auto) {auta.pop(auto);}
             });
         }
-
     }
+
+    let auta = [new Auto(1982,"Škoda","Octavia","12000")];
+    let autoservis = new Autoservis("Auto Prdík");
 
     let znackaInput = document.getElementById("znackaInput");
     let rokVyrobyInput = document.getElementById("rokVyrobyInput");
     let modelInput = document.getElementById("modelInput");
     let najeteKmInput = document.getElementById("najeteKmInput");
     let submitButton = document.getElementById("submitButton");
+    let printAllAutaButton = document.getElementById("printAllAutaButton");
+    let card = document.getElementById("card");
+    let autaText = document.getElementById("autaText");
 
     submitButton.addEventListener("click",Submit);
+    printAllAutaButton.addEventListener("click",autoservis.PrintAllAuta);
 
-    let auta = [new Auto(1982,"Škoda","Octavia","12000")];
-    let autoservis = new Autoservis("Auto Prdík",auta);
-
+    
+    ResetLocalStorage();
     function Submit() 
     {
         let rokVyroby = rokVyrobyInput.value;
         let znacka = znackaInput.value;
         let model = modelInput.value;
         let najeteKm = najeteKmInput.value;
-
         let auto = new Auto(rokVyroby,znacka,model,najeteKm);
         autoservis.AddAuto(auto);
         console.log("[" + znacka + "]" + "[" + model + "]" + "[" + rokVyroby + "]" + "[" + najeteKm + "]");
@@ -107,6 +135,13 @@
         return count;
     }
 
-
+    function ResetLocalStorage()
+    {
+        window.localStorage.clear();
+    }
 </script>
+
+<style>
+</style>
+
 </html>
