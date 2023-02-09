@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Autoservis</h1>
+    </div>
+
+    <div class="container" style="width: 25%;">
+        <div class="input-group mb-3">
+            <input id="znackaInput" type="text" class="form-control" placeholder="Značka" aria-label="Značka" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <input id="rokVyrobyInput" type="text" class="form-control" placeholder="Rok výroby" aria-label="Rok výroby" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <input id="modelInput" type="text" class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <input id="najeteKmInput" type="text" class="form-control" placeholder="Najeté kilometry" aria-label="Najeté kilometry" aria-describedby="basic-addon1">
+        </div>
+        <button id="submitButton" type="button" class="btn btn-primary">Submit</button>
+    </div>
+</body>
+<script>
+
+    class Auto
+    {
+        constructor(rokVyroby, znacka, model, najeteKm)
+        {
+            this.rokVyroby = rokVyroby;
+            this.znacka = znacka;
+            this.model = model;
+            this.najeteKm = najeteKm;
+        }
+    }
+
+    class Autoservis
+    {
+        constructor(auta,nazev)
+        {
+            this.auta = auta;
+            this.nazev = nazev;
+        }
+
+        GetVsechnyAuta() 
+        {
+            return auta;
+        }
+
+        AddAuto(auto)
+        {
+            auta.push(auto);
+        }
+
+        DeleteAuto(auto)
+        {
+            auta.forEach(element => {
+                if (element == auto) {auta.pop(auto);}
+            });
+        }
+
+    }
+
+    let znackaInput = document.getElementById("znackaInput");
+    let rokVyrobyInput = document.getElementById("rokVyrobyInput");
+    let modelInput = document.getElementById("modelInput");
+    let najeteKmInput = document.getElementById("najeteKmInput");
+    let submitButton = document.getElementById("submitButton");
+
+    submitButton.addEventListener("click",Submit);
+
+    let auta = [new Auto(1982,"Škoda","Octavia","12000")];
+    let autoservis = new Autoservis("Auto Prdík",auta);
+
+    function Submit() 
+    {
+        let rokVyroby = rokVyrobyInput.value;
+        let znacka = znackaInput.value;
+        let model = modelInput.value;
+        let najeteKm = najeteKmInput.value;
+
+        let auto = new Auto(rokVyroby,znacka,model,najeteKm);
+        autoservis.AddAuto(auto);
+        console.log("[" + znacka + "]" + "[" + model + "]" + "[" + rokVyroby + "]" + "[" + najeteKm + "]");
+        window.localStorage.setItem("auto" + GetSavedAutaCount(),JSON.stringify(auto));
+        window.localStorage.setItem("autaCount",GetSavedAutaCount() + 1);
+    }
+
+    function GetSavedAutaCount()
+    {
+        let count = window.localStorage.getItem("autaCount");
+        if (count == null)
+        {
+            return 0;
+        }
+        return count;
+    }
+
+
+</script>
+</html>
